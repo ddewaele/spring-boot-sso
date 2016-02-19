@@ -1,0 +1,17 @@
+server:
+    port: 8888
+
+zuul:
+  routes:
+    ui:
+      url: http://localhost:8080
+    backend1:
+      url: http://localhost:8081
+    backend2:
+      url: http://localhost:8082
+
+security:
+    user:
+      password: password
+
+    sessions: ALWAYS

@@ -1,0 +1,10 @@
+server:
+  port: 8082
+
+security:
+  user:
+    name: backend2
+    password: pass
+
+
+  sessions: NEVER
