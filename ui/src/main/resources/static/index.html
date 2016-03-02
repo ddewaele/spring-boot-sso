@@ -23,9 +23,9 @@
 
             <tr><td>API1</td><td><div id="api1"></div></td></tr>
 
-            <tr><td>Backend1 secured endpoint with CORS (accessing directly)</td><td>http://localhost:8081/api/sayHello</td><td><div id="backend1-secured-direct"></div></td></tr>
+            <tr><td>Backend1 secured endpoint with CORS (accessing directly)</td><td>http://localhost:8081/api/user</td><td><div id="backend1-secured-direct"></div></td></tr>
             <tr><td>Backend1 public endpoint with CORS (accessing directly)</td><td>http://localhost:8081/api/public</td><td><div id="backend1-public-direct"></div></td></tr>
-            <tr><td>Backend2 secured endpoint (accessing directly)</td><td>http://localhost:8082/api/sayHello</td><td><div id="backend2-secured-direct"></div></td></tr>
+            <tr><td>Backend2 secured endpoint (accessing directly)</td><td>http://localhost:8082/api/user</td><td><div id="backend2-secured-direct"></div></td></tr>
             <tr><td>Backend2 public endpoint (accessing directly)</td><td>http://localhost:8082/api/public</td><td><div id="backend2-public-direct"></div></td></tr>
 
             <tr><td>Backend1 secured endpoint (accessing through gateway)</td><td>http://localhost:8888/backend1/api/user</td><td><div id="backend1-gateway"></div></td></tr>
@@ -37,18 +37,6 @@
     </div>
 
     <script>
-        jQuery.get("/api/user")
-            .done(function(result) {
-                if (result.principal) {
-                    $("#user_text").html(result.principal.username);
-                } else {
-                    $("#user_text").html("Not authenticated");
-                }
-            })
-            .fail(function(error) {
-                $("#user_text").html("Not authenticated");
-            });
-
 
         jQuery.get("/ui/api/user")
                 .done(function(result) {
@@ -62,12 +50,24 @@
                     $("#user_text").html("Not authenticated");
                 });
 
-        jQuery.get("http://localhost:8081/api/sayHello")
+        jQuery.get("/api/user")
+                .done(function(result) {
+                    if (result.principal) {
+                        $("#user_text").html(result.principal.username);
+                    } else {
+                        $("#user_text").html("Not authenticated");
+                    }
+                })
+                .fail(function(error) {
+                    $("#user_text").html("Not authenticated");
+                });
+
+        jQuery.get("http://localhost:8081/api/user")
                 .done(function(result) {
                     $("#backend1-secured-direct").html(JSON.stringify(result));
                 })
                 .fail(function(error) {
-                    $("#backend1-secured-direct").html(error.statusText);
+                    $("#backend1-secured-direct").html(error.statusText + "(http code " + error.status + ")");
                 });
 
 
@@ -76,17 +76,17 @@
                     $("#backend1-public-direct").html(JSON.stringify(result));
                 })
                 .fail(function(error) {
-                    $("#backend1-public-direct").html(error.statusText);
+                    $("#backend1-public-direct").html(error.statusText + "(http code " + error.status + ")");
                 });
 
 
-        jQuery.get("http://localhost:8082/api/sayHello")
+        jQuery.get("http://localhost:8082/api/user")
                 .done(function(result) {
                     console.log("backend2-gateway = " + result);
                     $("#backend2-secured-direct").html(JSON.stringify(result));
                 })
                 .fail(function(error) {
-                    $("#backend2-secured-direct").html(error.statusText);
+                    $("#backend2-secured-direct").html(error.statusText + "(http code " + error.status + ")");
                 });
 
         jQuery.get("http://localhost:8082/api/public")
@@ -95,7 +95,7 @@
                     $("#backend2-public-direct").html(JSON.stringify(result));
                 })
                 .fail(function(error) {
-                    $("#backend2-public-direct").html(error.statusText);
+                    $("#backend2-public-direct").html(error.statusText + "(http code " + error.status + ")");
                 });
 
 
@@ -105,7 +105,7 @@
                     $("#backend1-gateway").html(JSON.stringify(result));
                 })
                 .fail(function(error) {
-                    $("#backend1-gateway").html(error.statusText);
+                    $("#backend1-gateway").html(error.statusText + "(http code " + error.status + ")");
                 });
 
         jQuery.get("/backend2/api/user")
@@ -114,7 +114,7 @@
                     $("#backend2-gateway").html(JSON.stringify(result));
                 })
                 .fail(function(error) {
-                    $("#backend2-gateway").html(error.statusText);
+                    $("#backend2-gateway").html(error.statusText + "(http code " + error.status + ")");
                 });
 
     </script>
